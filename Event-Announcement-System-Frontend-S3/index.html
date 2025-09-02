@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Announcement System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Event Announcement System</h1>
+
+    <section>
+      <h2>Subscribe for Notifications</h2>
+      <input id="email" type="email" placeholder="Enter your email" />
+      <button onclick="subscribeUser()">Subscribe</button>
+      <div id="subscribeStatus"></div>
+    </section>
+
+    <hr />
+
+    <section>
+      <h2>Send a Notification</h2>
+      <textarea id="message" placeholder="Type your message..."></textarea>
+      <button onclick="sendNotification()">Send</button>
+      <div id="status"></div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
