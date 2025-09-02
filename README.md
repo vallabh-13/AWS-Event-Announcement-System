@@ -14,11 +14,13 @@ This repository contains a serverless Event Announcement System built using AWS.
 
 ## Architecture Diagram
 
-![alt text](Aws-3-Tier-Architecture.jpg)
+![alt text](AWS-Project-2-Diagram.png)
 
 ## Final Result
 
-![alt text](Final-Result.png)
+![alt text](Web-Final-Output.png)
+
+![alt text](Email-Final-Output.png)
 
 ## Components:
 
