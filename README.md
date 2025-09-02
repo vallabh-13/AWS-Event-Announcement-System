@@ -1,14 +1,16 @@
 # Second Cloud Project - AWS-Event-Announcement-System
 
-This repository contains a simple demo application built using a three-tier architecture on AWs. The application demonstrates the fundamental concepts of separating frontend, backend, and database components in a web application.
+This repository contains a serverless Event Announcement System built using AWS. The application demonstrates how to integrate **S3**, **API Gateway**, **Lambda**, and **SNS** to create a scalable, multi-user notification platform.
 
 # What I learned from the project-
 
-- For demo Project Single Nat gateway was used but for production workload, always recommended to have Nat gateway for each private subnet in each AZ so that, when AZ fails the outgoing network connecton is not stoped.
-- Nat gate way should be made only after internet gateway is ready and attached or else it will fail.
-- This project was made manually to understand workflow but, In the future terraform would be a good option for effective use.
-- When creating DB, Managing it with AWS Secrets Manager is mush secure but for now did it by seld managed option.
-- Bst to have DB in private subnet and should not have public access. 
+- Learned how to build a fully serverless architecture using S3, API Gateway, Lambda, and SNS
+
+- Gained hands-on experience with CORS configuration for API Gateway and S3-hosted frontend
+
+- Built and tested a multi-user notification system with real-time email delivery
+  
+- Understood the difference between publishing to SNS and subscribing users via Lambda
 
 ## Architecture Diagram
 
@@ -18,88 +20,67 @@ This repository contains a simple demo application built using a three-tier arch
 
 ![alt text](Final-Result.png)
 
-The application follows the Basic three-tier architecture:
+## Components:
 
-1. **Frontend Tier**
-   - HTML/CSS/JavaScript
-   - Served by NGINX web servers
-
-2. **Backend Tier**
-   - PHP API
-   - Communicates with database
-   - Serves data to frontend
-
-3. **Database Tier**
-   - MySQL database with Amazone RDS
-   - Stores application data
+- **S3 Bucket**: Hosts the static frontend (HTML/CSS/JS)
+- **API Gateway**: Routes requests to Lambda functions
+- **NotifyMeLambda**: Publishes messages to SNS
+- **SubscribeUserLambda**: Subscribes user emails to SNS
+- **SNS Topic**: Sends email notifications to confirmed subscribers
+- **IAM ROLE** : Allow Lambda to communicate with SNS
 
 ## Features
 
-- Basic responsive design and Practice Hands-on Project.
+- Users can subscribe to notifications via email
+- Admins can send announcements to all confirmed subscribers
+- Fully serverless architecture—no EC2 or RDS involved
+- Clean, responsive frontend hosted on S3
 
-## AWS Infrastructure Components
+## 📦 Deployment Notes
 
-When deployed on AWS, the infrastructure includes:
-
-- **Web ALB**: Load balancer for distributing traffic to web servers
-- **NGINX Servers**: EC2 instances in an auto-scaling group
-- **App ALB**: Load balancer for distributing traffic to application servers
-- **PHP Servers**: EC2 instances in an auto-scaling group
-- **RDS MySQL**: Managed relational database service
+- CORS configured for both endpoints
+- IAM roles scoped to allow `sns:Publish` and `sns:Subscribe`
+- Manual deployment used for learning; Terraform planned for v2
+- Frontend updated via S3 uploads; backend via Lambda console
 
 ### Steps
 
-1. Create VPC
-2. Create subnets
-    1. Web Public 1a, 1b, 1c
-    2. Web Private 1a, 1b, 1c
-    3. App Private 1a, 1b, 1c
-    4. Db Private 1a, 1b, 1c
-3. Create route tables
-    1. Web Public
-    2. Web Private 1a, 1b, 1c
-    3. App Private 1a, 1b, 1c
-    4. Db Private 1a, 1b, 1c
-4. Associate route tables with subnet
-5. Create internet Gateway (IGW)
-    1. Attach it to VPC
-6. Create NAT gateway (NATGW) in web public subnet
-7. Add IGW and NAT routes in route table
-    1. Public -> IGW
-    2. Private -> NAT
-8. Create security groups
-    1. Frontend ALB
-    2. Frontend Servers
-    3. Backend ALB
-    4. Backend Servers
-    5. Db Private Servers
-9. Create database subnet group
-10. Create database server
-11. Create Frontend ALB
-    1. Create Frontend ALB target group 
-12. Create Backend ALB
-    1. Create Backend ALB target group
-13. Create Frontend Server AMI
-    1. Install Nginx
-    2. Install Git
-14. Create Backend Server AMI
-    1. Install PHP, MySQL, Apache
-    2. Install Git
-    3. Run the database script
-15. Create the Launch Template for Frontend Server
-16. Create the Launch Template for Backend Server
-17. Create the Auto Scaling Group for Frontend Server
-18. Create the Auto Scaling Group for Backend Server
+1. **Create SNS Topic**  
+   - Add your email as a subscriber and confirm it
 
-## Security Considerations
+2. **Create Lambda Functions**  
+   - `NotifyMeLambda`: Publishes messages to SNS  
+   - `SubscribeUserLambda`: Subscribes emails to SNS
 
-This is a demo application and lacks several security features that would be necessary in a production environment:
+3. **Set IAM Permissions**  
+   - Grant `sns:Publish` and `sns:Subscribe` to respective Lambda roles
 
-- Input validation and sanitization
-- Authentication and authorization
-- HTTPS encryption
-- Protection against SQL injection (although PDO with prepared statements is used)
-- CORS configuration
-- NACl not included
+4. **Configure API Gateway**  
+   - Create `/Nofity` and `/subscribe` endpoints  
+   - Link each to its Lambda (POST + OPTIONS with CORS)
 
-This sample application was created as a demonstration of AWS three-tier architecture principles.
+5. **Host Frontend on S3**  
+   - Upload `index.html`, `style.css`, `script.js`  
+   - Enable static website hosting and set public read access
+
+6. **Wire Up Frontend**  
+   - Add JS functions to call both endpoints  
+   - Test subscription and notification flows
+
+7. **Validate Everything**  
+   - Confirm SNS emails  
+   - Check Lambda logs  
+   - Polish UI and diagram
+
+## 🔐 Security Considerations
+
+This is a demo application and lacks production-grade security features:
+
+- No authentication or authorization
+- No HTTPS (S3 static hosting only)
+- No input validation or sanitization
+- No Secrets Manager integration
+- No NACLs or WAF
+
+This project helped me solidify my understanding of **event-driven architecture**, **SNS workflows**, using AWS. 
+
