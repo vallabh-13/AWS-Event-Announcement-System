@@ -38,7 +38,7 @@ This repository contains a serverless Event Announcement System built using AWS.
 - Fully serverless architecture—no EC2 or RDS involved
 - Clean, responsive frontend hosted on S3
 
-## 📦 Deployment Notes
+## Deployment Notes
 
 - CORS configured for both endpoints
 - IAM roles scoped to allow `sns:Publish` and `sns:Subscribe`
@@ -74,7 +74,7 @@ This repository contains a serverless Event Announcement System built using AWS.
    - Check Lambda logs  
    - Polish UI and diagram
 
-## 🔐 Security Considerations
+## Security Considerations
 
 This is a demo application and lacks production-grade security features:
 
